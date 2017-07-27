@@ -1,0 +1,17 @@
+MIDlet-Name: Bible
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Nguyen Chiem Minh Vu
+MIDlet-Jar-URL: Bible.jar
+MIDlet-Jar-Size: 30857
+MIDlet-Description: Bible (Vietnamese)
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-1: Bible,img/bible.png,
+RIM-MIDlet-Flags-1: 0
+Manifest-Version: 1.0
+RIM-COD-URL: Bible.cod
+RIM-COD-Size: 21932
+RIM-COD-Creation-Time: 1501167538
+RIM-COD-Module-Name: Bible
+RIM-COD-Module-Dependencies: net_rim_cldc
+RIM-COD-SHA1: 81 1f 65 9f dc 89 ce 11 4e 5f 8a 04 c3 dc 82 5b 6b 74 58 9a

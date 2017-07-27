@@ -1,0 +1,31 @@
+<loader version="1.0">
+	<application id="Bible">
+		<name >
+			Bible
+		</name>
+		<description >
+			Bible (Vietnamese)
+		</description>
+		<version >
+			1.0.0
+		</version>
+		<vendor >
+			Nguyen Chiem Minh Vu
+		</vendor>
+		<copyright >
+			Copyright (c) 2017 Nguyen Chiem Minh Vu
+		</copyright>
+		<fileset Java="1.55" _blackberryVersion="[7.1.0)">
+			<directory >
+				7.1.0
+			</directory>
+			<files >
+				Bible.cod
+
+			</files>
+
+		</fileset>
+
+	</application>
+
+</loader>
