@@ -1,10 +1,7 @@
 package mypackage;
 
 import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.table.SimpleList;
@@ -21,7 +18,8 @@ public class BookSelectionScreen extends MainScreen {
 	private VerticalFieldManager	midManager;
 	private HorizontalFieldManager	botManager;
 	
-	private SimpleList				listOfBook;
+	private SimpleList				oldTestament;
+	private SimpleList				newTestament;
 	
 	// ==========================================================================
 	// public methods
@@ -77,16 +75,26 @@ public class BookSelectionScreen extends MainScreen {
 	
 	private void initMidManager()
 	{
-		midManager = new VerticalFieldManager();
+		midManager = new VerticalFieldManager(VERTICAL_SCROLLBAR);
 		
 		// ======================================================
 		// init list of book
-		listOfBook = new SimpleList(midManager);
-		listOfBook.add("Genesis");
-		listOfBook.add("Mathew");
-		listOfBook.add("Mark");
-		listOfBook.add("Luke");
-		listOfBook.add("John");
+		
+		LabelField oldLabel = new LabelField("Old Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		midManager.add(oldLabel);
+		
+		oldTestament = new SimpleList(midManager);
+		
+		
+		SeparatorField midLine = new SeparatorField(SeparatorField.LINE_HORIZONTAL);
+		midLine.setMargin(0, 0, 5, 0);
+		midManager.add(midLine);
+		
+		LabelField newLabel = new LabelField("New Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		midManager.add(newLabel);
+		
+		newTestament = new SimpleList(midManager);
+		
 	}
 	
 	private void initBotManager()
