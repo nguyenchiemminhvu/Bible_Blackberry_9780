@@ -177,6 +177,7 @@ public class Book
 		
 		// reading
 		{
+			// just for debug
 			verses.addElement("(1) Verses 1.");
 			verses.addElement("(2) Verses 2.");
 			verses.addElement("(3) Verses 3.");
