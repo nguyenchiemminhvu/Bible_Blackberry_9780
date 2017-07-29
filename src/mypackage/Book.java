@@ -1,5 +1,10 @@
 package mypackage;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Vector;
+
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
@@ -26,7 +31,15 @@ public class Book
 	{
 		language = "English"; // default
 		name = "";
+		type = "";
+		bookIndex = 0;
 		numberOfChapter = 0;
+		relativeDir = "";
+	}
+	
+	public Book(String lang, String type, String name) throws Exception
+	{
+		this.setBook(lang, type, name);
 	}
 	
 	public String getLanguage()
@@ -49,6 +62,11 @@ public class Book
 		return this.relativeDir;
 	}
 	
+	public int getNumberOfChapter()
+	{
+		return this.numberOfChapter;
+	}
+	
 	public void setLanguage(String lang)
 	{
 		this.language = lang;
@@ -68,7 +86,7 @@ public class Book
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + name;
+			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
 			
 			// check folder exist or not
 			FileConnection fConnection = (FileConnection) Connector.open(this.relativeDir);
@@ -77,6 +95,17 @@ public class Book
 				fConnection.close();
 				throw new Exception("This book is not existed!");
 			}
+			
+			// counting number of chapter
+			Enumeration enumFolder = fConnection.list("*", false);
+			int count = 0;
+			while (enumFolder.hasMoreElements())
+			{
+				enumFolder.nextElement();
+				count++;
+			}
+			this.numberOfChapter = count;
+			
 			fConnection.close();
 		}
 		else
@@ -105,7 +134,7 @@ public class Book
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + this.name;
+			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
 			
 			// check folder exist or not
 			FileConnection fConnection = (FileConnection) Connector.open(this.relativeDir);
@@ -114,6 +143,17 @@ public class Book
 				fConnection.close();
 				throw new Exception("This book is not existed!");
 			}
+			
+			// counting number of chapter
+			Enumeration enumFolder = fConnection.list("*", false);
+			int count = 0;
+			while (enumFolder.hasMoreElements())
+			{
+				enumFolder.nextElement();
+				count++;
+			}
+			this.numberOfChapter = count;
+			
 			fConnection.close();
 		}
 		else
@@ -122,9 +162,29 @@ public class Book
 		}
 	}
 	
-	public int getNumberOfChapter()
+	public Vector readChapter(int chapter) throws IOException
 	{
-		return 0;
+		if(chapter <= 0 || chapter > numberOfChapter)
+			return null;
+		
+		Vector verses = new Vector();
+		
+		String relativeDir = "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+		String fullPath = relativeDir + "/" + String.valueOf(chapter) + "/content.bible";
+		
+		FileConnection fConnection = (FileConnection) Connector.open(fullPath);
+		DataInputStream iStream = fConnection.openDataInputStream();
+		
+		// reading
+		{
+			verses.addElement("(1) Verses 1.");
+			verses.addElement("(2) Verses 2.");
+			verses.addElement("(3) Verses 3.");
+		}
+		
+		iStream.close();
+		fConnection.close();
+		return verses;
 	}
 	
 	// ===================================================
