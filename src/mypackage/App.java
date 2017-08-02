@@ -1,5 +1,7 @@
 package mypackage;
 
+import java.io.IOException;
+
 import net.rim.device.api.ui.UiApplication;
 
 /**
@@ -11,6 +13,7 @@ public class App extends UiApplication
     /**
      * Entry point for application
      * @param args Command line arguments (not used)
+     * @throws IOException 
      */ 
     public static void main(String[] args)
     {
@@ -23,6 +26,7 @@ public class App extends UiApplication
 
     /**
      * Creates a new MyApp object
+     * @throws IOException 
      */
     public App()
     {        

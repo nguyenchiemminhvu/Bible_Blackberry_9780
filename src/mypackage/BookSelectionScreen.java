@@ -1,13 +1,23 @@
 package mypackage;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+
+import net.rim.device.api.io.File;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.table.SimpleList;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
+import net.rim.device.resources.Resource;
 
 public class BookSelectionScreen extends MainScreen {
 
@@ -24,7 +34,7 @@ public class BookSelectionScreen extends MainScreen {
 	// ==========================================================================
 	// public methods
 	
-	public BookSelectionScreen() 
+	public BookSelectionScreen()
 	{
 		super();
 		initUI();
@@ -80,21 +90,41 @@ public class BookSelectionScreen extends MainScreen {
 		// ======================================================
 		// init list of book
 		
-		LabelField oldLabel = new LabelField("Old Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		// old testament
+		LabelField oldLabel = null;
+		if(AppSettings.getInstance().appLanguage.compareTo("English") == 0)
+			oldLabel = new LabelField("Old Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		else if(AppSettings.getInstance().appLanguage.compareTo("Vietnamese") == 0)
+			oldLabel = new LabelField("Cựu ước", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+			
 		midManager.add(oldLabel);
 		
 		oldTestament = new SimpleList(midManager);
 		
+		// load old testament books
+		{
+			
+		}
 		
 		SeparatorField midLine = new SeparatorField(SeparatorField.LINE_HORIZONTAL);
 		midLine.setMargin(0, 0, 5, 0);
 		midManager.add(midLine);
 		
-		LabelField newLabel = new LabelField("New Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		// new testament
+		LabelField newLabel = null;
+		if(AppSettings.getInstance().appLanguage.compareTo("English") == 0)
+			newLabel = new LabelField("New Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		else if(AppSettings.getInstance().appLanguage.compareTo("Vietnamese") == 0)
+			newLabel = new LabelField("Tân ước", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
+		
 		midManager.add(newLabel);
 		
 		newTestament = new SimpleList(midManager);
 		
+		// load new testament books
+		{
+			
+		}
 	}
 	
 	private void initBotManager()

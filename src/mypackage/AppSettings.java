@@ -24,7 +24,7 @@ public class AppSettings
 	// ============================================================
 	// setting attributes
 	
-	private String appLanguage;
+	public String appLanguage;
 	
 	
 	// ============================================================
