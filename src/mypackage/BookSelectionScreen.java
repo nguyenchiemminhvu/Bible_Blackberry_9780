@@ -1,13 +1,11 @@
 package mypackage;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Enumeration;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
-import net.rim.device.api.io.File;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
@@ -17,7 +15,6 @@ import net.rim.device.api.ui.component.table.SimpleList;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
-import net.rim.device.resources.Resource;
 
 public class BookSelectionScreen extends MainScreen {
 
@@ -103,7 +100,30 @@ public class BookSelectionScreen extends MainScreen {
 		
 		// load old testament books
 		{
+			String oldTestamentDir = AppSettings.getInstance().APP_DATA_ON_SD_CARD;
+			oldTestamentDir += "books/" + AppSettings.getInstance().appLanguage + "/old_testament/";
 			
+			FileConnection fConnection = null;
+			
+			/*try {
+				fConnection = (FileConnection) Connector.open(oldTestamentDir);
+				
+				if (!fConnection.exists())
+				{
+					fConnection.mkdir();
+				}
+				
+				fConnection.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}*/
+			
+			try {
+				if(fConnection != null && fConnection.isOpen())
+					fConnection.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		SeparatorField midLine = new SeparatorField(SeparatorField.LINE_HORIZONTAL);

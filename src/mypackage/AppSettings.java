@@ -19,6 +19,7 @@ public class AppSettings
 	// ============================================================
 	
 	public static final String SD_CARD					= "file:///SDCard/";
+	public static final String APP_DATA_ON_SD_CARD		= "file:///SDCard/appdata/";
 	
 	public static final String APP_LANGUAGE_ENGLISH 	= "English";
 	public static final String APP_LANGUAGE_VIETNAMESE 	= "Vietnamese";
