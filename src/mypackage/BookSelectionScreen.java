@@ -2,6 +2,7 @@ package mypackage;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
@@ -105,18 +106,29 @@ public class BookSelectionScreen extends MainScreen {
 			
 			FileConnection fConnection = null;
 			
-			/*try {
+			try {
 				fConnection = (FileConnection) Connector.open(oldTestamentDir);
 				
-				if (!fConnection.exists())
+				if (fConnection.exists())
 				{
-					fConnection.mkdir();
+					//todo
+					Vector books = new Vector();
+					Enumeration listBook = fConnection.list();
+					int numberOfOldTestamentBook = 0;
+					
+					while(listBook.hasMoreElements())
+					{
+						String book = (String) listBook.nextElement();
+						book = book.substring(0, book.length() - 1);
+						books.addElement(book);
+						numberOfOldTestamentBook++;
+					}
 				}
 				
 				fConnection.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
-			}*/
+			}
 			
 			try {
 				if(fConnection != null && fConnection.isOpen())
@@ -143,7 +155,41 @@ public class BookSelectionScreen extends MainScreen {
 		
 		// load new testament books
 		{
+			String oldTestamentDir = AppSettings.getInstance().APP_DATA_ON_SD_CARD;
+			oldTestamentDir += "books/" + AppSettings.getInstance().appLanguage + "/new_testament/";
 			
+			FileConnection fConnection = null;
+			
+			try {
+				fConnection = (FileConnection) Connector.open(oldTestamentDir);
+				
+				if (fConnection.exists())
+				{
+					//todo
+					Vector books = new Vector();
+					Enumeration listBook = fConnection.list();
+					int numberOfNewTestamentBook = 0;
+					
+					while(listBook.hasMoreElements())
+					{
+						String book = (String) listBook.nextElement();
+						book = book.substring(0, book.length() - 1);
+						books.addElement(book);
+						numberOfNewTestamentBook++;
+					}
+				}
+				
+				fConnection.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			try {
+				if(fConnection != null && fConnection.isOpen())
+					fConnection.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

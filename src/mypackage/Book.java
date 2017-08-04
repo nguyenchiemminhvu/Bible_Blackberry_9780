@@ -15,7 +15,6 @@ public class Book
 	// ===================================================
 	// private properties
 	
-	private String			language;
 	private String 			name;
 	private String			type; // old_testament or new_testament
 	private int				bookIndex;
@@ -29,7 +28,6 @@ public class Book
 	
 	public Book()
 	{
-		language = "English"; // default
 		name = "";
 		type = "";
 		bookIndex = 0;
@@ -37,15 +35,11 @@ public class Book
 		relativeDir = "";
 	}
 	
-	public Book(String lang, String type, String name) throws Exception
+	public Book(String type, String name) throws Exception
 	{
-		this.setBook(lang, type, name);
+		this.setBook(type, name);
 	}
 	
-	public String getLanguage()
-	{
-		return this.language;
-	}
 	
 	public String getName()
 	{
@@ -67,11 +61,6 @@ public class Book
 		return this.numberOfChapter;
 	}
 	
-	public void setLanguage(String lang)
-	{
-		this.language = lang;
-	}
-	
 	public void setTypeAndName(String t, String n) throws Exception
 	{
 		int firstDashCharacterIndex = name.indexOf('_');
@@ -86,10 +75,11 @@ public class Book
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
 			
 			// check folder exist or not
-			FileConnection fConnection = (FileConnection) Connector.open(this.relativeDir);
+			String absoluteDir = AppSettings.APP_DATA_ON_SD_CARD + this.relativeDir;
+			FileConnection fConnection = (FileConnection) Connector.open(absoluteDir);
 			if(!fConnection.exists())
 			{
 				fConnection.close();
@@ -97,7 +87,7 @@ public class Book
 			}
 			
 			// counting number of chapter
-			Enumeration enumFolder = fConnection.list("*", false);
+			Enumeration enumFolder = fConnection.list();
 			int count = 0;
 			while (enumFolder.hasMoreElements())
 			{
@@ -114,30 +104,20 @@ public class Book
 		}
 	}
 	
-	public void setBook(String language, String type, String name) throws Exception
+	public void setBook(String type, String name) throws Exception
 	{
 		int firstDashCharacterIndex = name.indexOf('_');
 		if (firstDashCharacterIndex != -1)
 		{
-			if (language.compareTo("English") != 0 || language.compareTo("Vietnamese") != 0)
-			{
-				throw new Exception("Invalid language! (English or Vietnamese)");
-			}
-			
-			if (type.compareTo("old_testament") != 0 || type.compareTo("new_testament") != 0)
-			{
-				throw new Exception("Invalid type of book! (old_testament or new_testament");
-			}
-			
-			this.language		= language;
 			this.type 			= type;
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
 			
 			// check folder exist or not
-			FileConnection fConnection = (FileConnection) Connector.open(this.relativeDir);
+			String absoluteDir = AppSettings.APP_DATA_ON_SD_CARD + this.relativeDir;
+			FileConnection fConnection = (FileConnection) Connector.open(absoluteDir);
 			if(!fConnection.exists())
 			{
 				fConnection.close();
@@ -145,7 +125,7 @@ public class Book
 			}
 			
 			// counting number of chapter
-			Enumeration enumFolder = fConnection.list("*", false);
+			Enumeration enumFolder = fConnection.list();
 			int count = 0;
 			while (enumFolder.hasMoreElements())
 			{
@@ -169,10 +149,11 @@ public class Book
 		
 		Vector verses = new Vector();
 		
-		String relativeDir = "books/" + this.language + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+		String relativeDir = "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
 		String fullPath = relativeDir + "/" + String.valueOf(chapter) + "/content.bible";
+		String absolutePath = AppSettings.APP_DATA_ON_SD_CARD + fullPath;
 		
-		FileConnection fConnection = (FileConnection) Connector.open(fullPath);
+		FileConnection fConnection = (FileConnection) Connector.open(absolutePath);
 		DataInputStream iStream = fConnection.openDataInputStream();
 		
 		// reading
