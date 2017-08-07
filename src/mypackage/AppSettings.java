@@ -1,6 +1,5 @@
 package mypackage;
 
-import net.rim.device.api.ui.component.Dialog;
 
 public class AppSettings 
 {
@@ -18,24 +17,46 @@ public class AppSettings
 	}
 	// ============================================================
 	
-	public static final String SD_CARD					= "file:///SDCard/BlackBerry/";
-	public static final String APP_DATA_ON_SD_CARD		= "file:///SDCard/BlackBerry/appdata/";
+	public static final String SD_CARD						= "file:///SDCard/BlackBerry/";
+	public static final String APP_DATA_ON_SD_CARD			= "file:///SDCard/BlackBerry/appdata/";
 	
-	public static final String APP_LANGUAGE_ENGLISH 	= "English";
-	public static final String APP_LANGUAGE_VIETNAMESE 	= "Vietnamese";
+	public static final String OLD_TESTAMENT				= "old_testament";
+	public static final String NEW_TESTAMENT				= "new_testament";
+	
+	public static final int NUMBER_OF_OLD_TESTAMENT_BOOK	= 39;
+	public static final int NUMBER_OF_NEW_TESTAMENT_BOOK	= 27;
+	
+	public static final String APP_LANGUAGE_ENGLISH 		= "English";
+	public static final String APP_LANGUAGE_VIETNAMESE 		= "Vietnamese";
 	
 	// ============================================================
 	// setting attributes
 	
 	public String appLanguage;
+	public String selectedTestament;
+	public String selectedBook;
+	public String selectedChapter;
 	
 	
 	// ============================================================
 	// public methods
 	
-	public String getAppLanguage()
+	public void selectTestament(String testament) throws Exception
 	{
-		return this.appLanguage;
+		if (testament.compareTo(OLD_TESTAMENT) == 0)
+		{
+			this.selectedTestament = OLD_TESTAMENT;
+		}
+		
+		else if (testament.compareTo(NEW_TESTAMENT) == 0)
+		{
+			this.selectedTestament = NEW_TESTAMENT;
+		}
+		
+		else
+		{
+			throw new Exception("Unknown testament");
+		}
 	}
 	
 	public void setAppLanguage(String lang) throws Exception
@@ -52,10 +73,8 @@ public class AppSettings
 		
 		else
 		{
-			throw new Exception("Unsupported language!");
+			this.appLanguage = APP_LANGUAGE_ENGLISH; // default
 		}
-		
-		Dialog.alert("Restart the application to apply " + this.appLanguage + " language!");
 	}
 	
 	// ============================================================
@@ -63,6 +82,7 @@ public class AppSettings
 	
 	private AppSettings()
 	{
-		appLanguage = "English"; // default language
+		selectedTestament 	= OLD_TESTAMENT;
+		appLanguage 		= APP_LANGUAGE_ENGLISH; // default language
 	}
 }

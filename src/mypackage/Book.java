@@ -16,7 +16,7 @@ public class Book
 	// private properties
 	
 	private String 			name;
-	private String			type; // old_testament or new_testament
+	private String			typeTestament; // old_testament or new_testament
 	private int				bookIndex;
 	private int 			numberOfChapter;
 	
@@ -28,18 +28,23 @@ public class Book
 	
 	public Book()
 	{
-		name = "";
-		type = "";
-		bookIndex = 0;
+		name 			= "";
+		typeTestament 	= "";
+		bookIndex 		= 0;
 		numberOfChapter = 0;
-		relativeDir = "";
+		relativeDir 	= "";
 	}
 	
-	public Book(String type, String name) throws Exception
+	public Book(String name) throws Exception
 	{
-		this.setBook(type, name);
+		this.setBook(name);
 	}
 	
+	
+	public String toString()
+	{
+		return this.name;
+	}
 	
 	public String getName()
 	{
@@ -48,7 +53,12 @@ public class Book
 	
 	public String getType()
 	{
-		return this.type;
+		return this.typeTestament;
+	}
+	
+	public int getIndex()
+	{
+		return this.bookIndex;
 	}
 	
 	public String getRelativeDir()
@@ -61,30 +71,20 @@ public class Book
 		return this.numberOfChapter;
 	}
 	
-	public void setTypeAndName(String t, String n) throws Exception
+	public void setTypeAndName(String n) throws Exception
 	{
 		int firstDashCharacterIndex = name.indexOf('_');
 		if (firstDashCharacterIndex != -1)
 		{
-			if (t.compareTo("old_testament") != 0 || t.compareTo("new_testament") != 0)
-			{
-				throw new Exception("Invalid type of book! (old_testament or new_testament");
-			}
-
-			this.type 			= t;
+			this.typeTestament 	= AppSettings.getInstance().selectedTestament;
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + AppSettings.getInstance().selectedTestament + "/" + String.valueOf(this.bookIndex) + "_" + this.name;
 			
 			// check folder exist or not
 			String absoluteDir = AppSettings.APP_DATA_ON_SD_CARD + this.relativeDir;
 			FileConnection fConnection = (FileConnection) Connector.open(absoluteDir);
-			if(!fConnection.exists())
-			{
-				fConnection.close();
-				throw new Exception("This book is not existed!");
-			}
 			
 			// counting number of chapter
 			Enumeration enumFolder = fConnection.list();
@@ -97,32 +97,22 @@ public class Book
 			this.numberOfChapter = count;
 			
 			fConnection.close();
-		}
-		else
-		{
-			throw new Exception("Invalid book's name! Book's name should have a dash character.");
 		}
 	}
 	
-	public void setBook(String type, String name) throws Exception
+	public void setBook(String name) throws Exception
 	{
 		int firstDashCharacterIndex = name.indexOf('_');
 		if (firstDashCharacterIndex != -1)
 		{
-			this.type 			= type;
+			this.typeTestament 	= AppSettings.getInstance().selectedTestament;
 			this.bookIndex 		= Integer.valueOf(name.substring(0, firstDashCharacterIndex)).intValue();
 			this.name 			= name.substring(firstDashCharacterIndex + 1);
 			
-			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+			this.relativeDir 	= "books/" + AppSettings.getInstance().appLanguage + "/" + AppSettings.getInstance().selectedTestament + "/" + String.valueOf(this.bookIndex) + "_" + this.name;
 			
-			// check folder exist or not
 			String absoluteDir = AppSettings.APP_DATA_ON_SD_CARD + this.relativeDir;
 			FileConnection fConnection = (FileConnection) Connector.open(absoluteDir);
-			if(!fConnection.exists())
-			{
-				fConnection.close();
-				throw new Exception("This book is not existed!");
-			}
 			
 			// counting number of chapter
 			Enumeration enumFolder = fConnection.list();
@@ -135,10 +125,6 @@ public class Book
 			this.numberOfChapter = count;
 			
 			fConnection.close();
-		}
-		else
-		{
-			throw new Exception("Invalid book's name! Book's name should have a dash character.");
 		}
 	}
 	
@@ -149,7 +135,7 @@ public class Book
 		
 		Vector verses = new Vector();
 		
-		String relativeDir = "books/" + AppSettings.getInstance().appLanguage + "/" + this.type + "/" + String.valueOf(this.bookIndex) + "_" + name;
+		String relativeDir = "books/" + AppSettings.getInstance().appLanguage + "/" + AppSettings.getInstance().selectedTestament + "/" + String.valueOf(this.bookIndex) + "_" + name;
 		String fullPath = relativeDir + "/" + String.valueOf(chapter) + "/content.bible";
 		String absolutePath = AppSettings.APP_DATA_ON_SD_CARD + fullPath;
 		

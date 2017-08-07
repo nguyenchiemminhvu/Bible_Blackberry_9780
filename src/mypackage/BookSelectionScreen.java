@@ -1,15 +1,16 @@
 package mypackage;
 
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
+import com.google.zxing.common.Collections;
+import com.google.zxing.common.Comparator;
+
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.table.SimpleList;
@@ -26,34 +27,24 @@ public class BookSelectionScreen extends MainScreen {
 	private VerticalFieldManager	midManager;
 	private HorizontalFieldManager	botManager;
 	
-	private SimpleList				oldTestament;
-	private SimpleList				newTestament;
+	private SimpleList				books;
 	
 	// ==========================================================================
 	// public methods
 	
-	public BookSelectionScreen()
+	public BookSelectionScreen() throws Exception
 	{
 		super();
+		AppSettings.getInstance().appLanguage = AppSettings.APP_LANGUAGE_ENGLISH;
+		AppSettings.getInstance().selectedTestament = AppSettings.OLD_TESTAMENT;
 		initUI();
 	}
-	
-	public boolean onClose()
-	{
-		System.exit(0);
-		return true;
-	}
-	
-	
-	// ==========================================================================
-	// protected methods
-	
 	
 
 	// ==========================================================================
 	// private methods
 	
-	private void initUI()
+	private void initUI() throws Exception
 	{
 		initTopManager();
 		initMidManager();
@@ -76,119 +67,68 @@ public class BookSelectionScreen extends MainScreen {
 		topManager.add(topIcon);
 		
 		// bible title
-		LabelField topTitle = new LabelField("Bible", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+		LabelField topTitle = null;
+		if (AppSettings.getInstance().selectedTestament.compareTo(AppSettings.OLD_TESTAMENT) == 0)
+			topTitle = new LabelField("Old Testament", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+		else if (AppSettings.getInstance().selectedTestament.compareTo(AppSettings.NEW_TESTAMENT) == 0)
+			topTitle = new LabelField("New Testament", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
 		topTitle.setMargin(0, 0, 0, 10);
 		topManager.add(topTitle);
 	}
 	
-	private void initMidManager()
+	private void initMidManager() throws Exception
 	{
 		midManager = new VerticalFieldManager(VERTICAL_SCROLLBAR);
 		
 		// ======================================================
 		// init list of book
 		
-		// old testament
-		LabelField oldLabel = null;
-		if(AppSettings.getInstance().appLanguage.compareTo("English") == 0)
-			oldLabel = new LabelField("Old Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
-		else if(AppSettings.getInstance().appLanguage.compareTo("Vietnamese") == 0)
-			oldLabel = new LabelField("Cựu ước", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
-			
-		midManager.add(oldLabel);
-		
-		oldTestament = new SimpleList(midManager);
-		
-		// load old testament books
 		{
-			String oldTestamentDir = AppSettings.getInstance().APP_DATA_ON_SD_CARD;
-			oldTestamentDir += "books/" + AppSettings.getInstance().appLanguage + "/old_testament/";
+			books = new SimpleList(midManager);
 			
-			FileConnection fConnection = null;
-			
-			try {
-				fConnection = (FileConnection) Connector.open(oldTestamentDir);
+			// load testament books
+			{
+				String testamentDir = AppSettings.getInstance().APP_DATA_ON_SD_CARD;
+				testamentDir += "books/" + AppSettings.getInstance().appLanguage + "/" + AppSettings.getInstance().selectedTestament + "/";
+				
+				FileConnection fConnection = null;
+				
+				fConnection = (FileConnection) Connector.open(testamentDir);
 				
 				if (fConnection.exists())
 				{
-					//todo
-					Vector books = new Vector();
+					Vector vBook = new Vector();
+					
 					Enumeration listBook = fConnection.list();
-					int numberOfOldTestamentBook = 0;
 					
 					while(listBook.hasMoreElements())
 					{
-						String book = (String) listBook.nextElement();
-						book = book.substring(0, book.length() - 1);
-						books.addElement(book);
-						numberOfOldTestamentBook++;
+						String bookName = (String) listBook.nextElement();
+						bookName = bookName.substring(0, bookName.length() - 1); // remove the '/' at the end
+						Book book = new Book(bookName);
+						vBook.addElement(book);
+					}
+					
+					Collections.insertionSort(vBook, new Comparator() {
+						public int compare(Object o1, Object o2) {
+							if(((Book)o1).getIndex() < ((Book)o2).getIndex())
+								return -1;
+							else if(((Book)o1).getIndex() == ((Book)o2).getIndex())
+								return 0;
+							else
+								return 1;
+						}
+					});
+					
+					for(int i = 0; i < vBook.size(); i++)
+					{
+						if(vBook.elementAt(i) != null)
+							books.add( ((Book)(vBook.elementAt(i))).getName() );
 					}
 				}
 				
 				fConnection.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-			try {
-				if(fConnection != null && fConnection.isOpen())
-					fConnection.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		SeparatorField midLine = new SeparatorField(SeparatorField.LINE_HORIZONTAL);
-		midLine.setMargin(0, 0, 5, 0);
-		midManager.add(midLine);
-		
-		// new testament
-		LabelField newLabel = null;
-		if(AppSettings.getInstance().appLanguage.compareTo("English") == 0)
-			newLabel = new LabelField("New Testament", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
-		else if(AppSettings.getInstance().appLanguage.compareTo("Vietnamese") == 0)
-			newLabel = new LabelField("Tân ước", LabelField.USE_ALL_WIDTH | LabelField.ELLIPSIS);
-		
-		midManager.add(newLabel);
-		
-		newTestament = new SimpleList(midManager);
-		
-		// load new testament books
-		{
-			String oldTestamentDir = AppSettings.getInstance().APP_DATA_ON_SD_CARD;
-			oldTestamentDir += "books/" + AppSettings.getInstance().appLanguage + "/new_testament/";
-			
-			FileConnection fConnection = null;
-			
-			try {
-				fConnection = (FileConnection) Connector.open(oldTestamentDir);
-				
-				if (fConnection.exists())
-				{
-					//todo
-					Vector books = new Vector();
-					Enumeration listBook = fConnection.list();
-					int numberOfNewTestamentBook = 0;
-					
-					while(listBook.hasMoreElements())
-					{
-						String book = (String) listBook.nextElement();
-						book = book.substring(0, book.length() - 1);
-						books.addElement(book);
-						numberOfNewTestamentBook++;
-					}
-				}
-				
-				fConnection.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-			try {
-				if(fConnection != null && fConnection.isOpen())
-					fConnection.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+
 			}
 		}
 	}
