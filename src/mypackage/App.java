@@ -19,18 +19,30 @@ public class App extends UiApplication
     {
         // Create a new instance of the application and make the currently
         // running thread the application's event dispatch thread.
-        App app = new App();       
-        app.enterEventDispatcher();
+        App.getInstance().enterEventDispatcher();
     }
     
 
+    private static App appInstance = null;
+    
+    public static App getInstance() throws Exception
+    {
+    	if(appInstance == null)
+    	{
+    		appInstance = new App();
+    	}
+    	return appInstance;
+    }
+    
     /**
      * Creates a new MyApp object
      * @throws Exception 
      */
     public App() throws Exception
     {        
+    	AppSettings.getInstance();
+    	
         // Push a screen onto the UI stack for rendering.
-        pushScreen(new BookSelectionScreen());
+        pushScreen(new TestamentSelectionScreen());
     }    
 }

@@ -34,12 +34,25 @@ public class AppSettings
 	
 	public String appLanguage;
 	public String selectedTestament;
-	public String selectedBook;
+	public String selectedBookName;
 	public String selectedChapter;
 	
+	private Book selectedBook;
 	
 	// ============================================================
 	// public methods
+	
+	public Book getSelectedBook() throws Exception 
+	{
+		if (this.selectedBook == null)
+		{
+			this.selectedBook = new Book();
+		}
+		
+		this.selectedBook.setBook(this.selectedBookName);
+		
+		return this.selectedBook;
+	}
 	
 	public void selectTestament(String testament) throws Exception
 	{
@@ -82,7 +95,10 @@ public class AppSettings
 	
 	private AppSettings()
 	{
-		selectedTestament 	= OLD_TESTAMENT;
 		appLanguage 		= APP_LANGUAGE_ENGLISH; // default language
+		selectedTestament 	= OLD_TESTAMENT;
+		selectedBookName	= "1_Genesis";
+		selectedChapter		= "1";
 	}
+
 }

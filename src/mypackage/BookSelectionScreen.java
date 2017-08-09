@@ -9,6 +9,9 @@ import javax.microedition.io.file.FileConnection;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 
+import net.rim.device.api.command.Command;
+import net.rim.device.api.command.CommandHandler;
+import net.rim.device.api.command.ReadOnlyCommandMetadata;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
@@ -35,15 +38,13 @@ public class BookSelectionScreen extends MainScreen {
 	public BookSelectionScreen() throws Exception
 	{
 		super();
-		AppSettings.getInstance().appLanguage = AppSettings.APP_LANGUAGE_ENGLISH;
-		AppSettings.getInstance().selectedTestament = AppSettings.OLD_TESTAMENT;
 		initUI();
 	}
 	
 
 	// ==========================================================================
 	// private methods
-	
+
 	private void initUI() throws Exception
 	{
 		initTopManager();
@@ -129,6 +130,7 @@ public class BookSelectionScreen extends MainScreen {
 				
 				fConnection.close();
 
+				books.setCommand(new ListBookCommand(), null, books);
 			}
 		}
 	}
@@ -136,5 +138,19 @@ public class BookSelectionScreen extends MainScreen {
 	private void initBotManager()
 	{
 		botManager = new HorizontalFieldManager();
+	}
+	
+	
+	// ==============================================================================
+	// command handlers
+	
+	private class ListBookCommand extends CommandHandler
+	{
+
+		public void execute(ReadOnlyCommandMetadata metadata, Object context) 
+		{
+			
+		}
+		
 	}
 }
