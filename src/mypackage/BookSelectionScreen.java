@@ -129,9 +129,10 @@ public class BookSelectionScreen extends MainScreen {
 				}
 				
 				fConnection.close();
-
-				books.setCommand(new ListBookCommand(), null, books);
 			}
+			
+			BooksHandler command = new BooksHandler();
+			books.setCommand(command, null, books);
 		}
 	}
 	
@@ -140,17 +141,24 @@ public class BookSelectionScreen extends MainScreen {
 		botManager = new HorizontalFieldManager();
 	}
 	
-	
 	// ==============================================================================
-	// command handlers
-	
-	private class ListBookCommand extends CommandHandler
+	// book list handler
+	private class BooksHandler extends CommandHandler
 	{
-
 		public void execute(ReadOnlyCommandMetadata metadata, Object context) 
 		{
-			
+			try {
+				
+				SimpleList books = (SimpleList) context;
+				int focusRow = books.getFocusRow();
+				AppSettings.getInstance().selectedBookName = String.valueOf(focusRow + 1) + "_" + books.get(focusRow);
+				AppSettings.getInstance().getSelectedBook();
+				
+				App.getInstance().pushScreen(new ChapterSelectionScreen());
+				
+			} catch (Exception e) {
+				
+			}
 		}
-		
 	}
 }
