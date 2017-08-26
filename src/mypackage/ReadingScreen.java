@@ -156,10 +156,16 @@ public class ReadingScreen extends MainScreen {
 		Vector content = this.selectedBook.readChapter(chapter);
 		for (int i = 0; i < content.size(); i++)
 		{
-			LabelField verse = new LabelField("", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+			HorizontalFieldManager hor = new HorizontalFieldManager();
+			VerticalFieldManager ver = new VerticalFieldManager();
+			
+			LabelField verse = new LabelField("", LabelField.VFULL);
 			verse.setText(content.elementAt(i));
 			
-			mid.add(verse);
+			hor.add(verse);
+			ver.add(hor);
+			
+			mid.add(ver);
 		}
 		
 		
@@ -183,10 +189,16 @@ public class ReadingScreen extends MainScreen {
 			Vector content = this.selectedBook.readChapter(currentChapter + 1);
 			for (int i = 0; i < content.size(); i++)
 			{
-				LabelField verse = new LabelField("", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+				HorizontalFieldManager hor = new HorizontalFieldManager();
+				VerticalFieldManager ver = new VerticalFieldManager();
+				
+				LabelField verse = new LabelField("", LabelField.VFULL);
 				verse.setText(content.elementAt(i));
 				
-				mid.add(verse);
+				hor.add(verse);
+				ver.add(hor);
+				
+				mid.add(ver);
 			}
 			
 			// bible title
@@ -210,10 +222,16 @@ public class ReadingScreen extends MainScreen {
 			Vector content = this.selectedBook.readChapter(currentChapter - 1);
 			for (int i = 0; i < content.size(); i++)
 			{
-				LabelField verse = new LabelField("", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+				HorizontalFieldManager hor = new HorizontalFieldManager();
+				VerticalFieldManager ver = new VerticalFieldManager();
+				
+				LabelField verse = new LabelField("", LabelField.VFULL);
 				verse.setText(content.elementAt(i));
 				
-				mid.add(verse);
+				hor.add(verse);
+				ver.add(hor);
+				
+				mid.add(ver);
 			}
 			
 			// bible title
