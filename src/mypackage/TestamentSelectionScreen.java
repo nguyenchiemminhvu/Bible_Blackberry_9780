@@ -3,6 +3,7 @@ package mypackage;
 import java.util.Enumeration;
 
 import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.TrackwheelListener;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -11,6 +12,7 @@ import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.component.DateField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.SpinBoxField;
@@ -129,44 +131,26 @@ public class TestamentSelectionScreen extends MainScreen {
 		this.add(middle);
 	}
 	
+	
 	private void initUITest() {
-		this.add(new LabelField("Chapter (1 - 100)"));
-		this.add(new LabelField());
-		this.add(new LabelField());
 		
-		// ============================================================
-		HorizontalFieldManager horManager = new HorizontalFieldManager();
-		
-		SpinBoxFieldManager smanager = new SpinBoxFieldManager();
-		smanager.setVisibleRows(3);
-		String[] choices = new String[100];
-		for (int i = 0; i < 100; i++)
-		{
-			choices[i] = new String("     " + String.valueOf(i + 1) + "     ");
-		}
-		TextSpinBoxField s = new TextSpinBoxField(choices);
-		smanager.add(s);
-		
-		// ============================================================
-		VerticalFieldManager verManager = new VerticalFieldManager();
-		
-		BasicEditField chapterEdit = new BasicEditField("Chapter: ", "");
-		ButtonField choose = new ButtonField("Select");
-		
-		verManager.add(chapterEdit);
-		verManager.add(choose);
-		
-		
-		// ============================================================
-		HorizontalFieldManager spaceManager = new HorizontalFieldManager();
-		spaceManager.add(new LabelField("            "));
-		
-		// ============================================================
-		horManager.add(smanager);
-		horManager.add(spaceManager);
-		horManager.add(verManager);
-		
-		// ============================================================
-		this.add(horManager);
+		this.addTrackwheelListener(new TrackwheelListener() {
+			
+			public boolean trackwheelUnclick(int status, int time) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			public boolean trackwheelRoll(int amount, int status, int time) {
+				// TODO Auto-generated method stub
+				//test.setText("" + amount + "  " + status + "  " + time);
+				return false;
+			}
+			
+			public boolean trackwheelClick(int status, int time) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 	}
 }
