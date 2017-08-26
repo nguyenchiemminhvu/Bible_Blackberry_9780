@@ -1,5 +1,7 @@
 package mypackage;
 
+import java.io.IOException;
+
 import net.rim.device.api.io.LineReader;
 import net.rim.device.api.lbs.maps.Boxable;
 import net.rim.device.api.system.Bitmap;
@@ -45,6 +47,20 @@ public class ChapterSelectionScreen extends MainScreen {
 		
 		initUI();	
 	}
+	
+	public boolean onClose()
+	{
+		try {
+			
+			this.save();
+			App.getInstance().popScreen(this);
+			
+		} catch (IOException e) {
+		} catch (Exception e) {
+		}
+		
+		return true;
+	}
 
 	
 	// ==========================================================================
@@ -74,55 +90,55 @@ public class ChapterSelectionScreen extends MainScreen {
 		topBar.add(topTitle);
 		
 		// =========================================================================================
-		// middle (chapter selection table)
+		// middle
 		VerticalFieldManager mid = new VerticalFieldManager(VerticalFieldManager.NO_VERTICAL_SCROLL | VerticalFieldManager.NO_VERTICAL_SCROLLBAR);
 		
 		HorizontalFieldManager horManager = new HorizontalFieldManager();
 		
-		// left: text spin box
-		{
-			SpinBoxFieldManager spinManager = new SpinBoxFieldManager();
-			spinManager.setVisibleRows(3);
-			
-			String[] listChapter = new String[numberOfChapter];
-			for (int i = 0; i < numberOfChapter; i++)
-			{
-				listChapter[i] = new String("  " + String.valueOf(i + 1) + "  ");
-			}
-			
-			final TextSpinBoxField chapterSpin = new TextSpinBoxField(listChapter);
-			spinManager.add(chapterSpin);
-			
-			
-			VerticalFieldManager subManager = new VerticalFieldManager();
-			
-			ButtonField buttonSpin = new ButtonField("Select");
-			buttonSpin.setChangeListener(new FieldChangeListener() 
-			{	
-				public void fieldChanged(Field field, int context) 
-				{
-					try {
-						
-						String selectedChapter = (String) chapterSpin.get(chapterSpin.getSelectedIndex());
-						AppSettings.getInstance().selectedChapter = selectedChapter;
-						App.getInstance().pushScreen(new ReadingScreen());
-						
-					} catch (Exception e) {
-						
-					}
-				}
-			});
-			
-			subManager.add(new LabelField());
-			subManager.add(new LabelField());
-			subManager.add(buttonSpin);
-			
-			horManager.add(spinManager);
-			horManager.add(subManager);
-		}
-		
-		horManager.add(new LabelField("  "));
-		horManager.add(new SeparatorField(SeparatorField.LINE_VERTICAL));
+//		// left: text spin box
+//		{
+//			SpinBoxFieldManager spinManager = new SpinBoxFieldManager();
+//			spinManager.setVisibleRows(3);
+//			
+//			String[] listChapter = new String[numberOfChapter];
+//			for (int i = 0; i < numberOfChapter; i++)
+//			{
+//				listChapter[i] = new String("  " + String.valueOf(i + 1) + "  ");
+//			}
+//			
+//			final TextSpinBoxField chapterSpin = new TextSpinBoxField(listChapter);
+//			spinManager.add(chapterSpin);
+//			
+//			
+//			VerticalFieldManager subManager = new VerticalFieldManager();
+//			
+//			ButtonField buttonSpin = new ButtonField("Select");
+//			buttonSpin.setChangeListener(new FieldChangeListener() 
+//			{	
+//				public void fieldChanged(Field field, int context) 
+//				{
+//					try {
+//						
+//						String selectedChapter = (String) chapterSpin.get(chapterSpin.getSelectedIndex());
+//						AppSettings.getInstance().selectedChapter = selectedChapter;
+//						App.getInstance().pushScreen(new ReadingScreen());
+//						
+//					} catch (Exception e) {
+//						
+//					}
+//				}
+//			});
+//			
+//			subManager.add(new LabelField());
+//			subManager.add(new LabelField());
+//			subManager.add(buttonSpin);
+//			
+//			horManager.add(spinManager);
+//			horManager.add(subManager);
+//		}
+//		
+//		horManager.add(new LabelField("  "));
+//		horManager.add(new SeparatorField(SeparatorField.LINE_VERTICAL));
 		horManager.add(new LabelField("  "));
 		
 		// right: basic edit field and button field
@@ -165,7 +181,7 @@ public class ChapterSelectionScreen extends MainScreen {
 			});
 			
 			HorizontalFieldManager subManager = new HorizontalFieldManager();
-			subManager.add(new LabelField("                "));
+			subManager.add(new LabelField("                       "));
 			subManager.add(buttonSelect);
 			
 			verManager.add(chapterInput);

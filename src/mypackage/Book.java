@@ -1,12 +1,17 @@
 package mypackage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
+
+import net.rim.device.api.io.ScanLine;
 
 
 public class Book
@@ -14,6 +19,8 @@ public class Book
 
 	// ===================================================
 	// private properties
+	
+	private boolean			reachedEndOfFile;
 	
 	private String 			name;
 	private String			typeTestament; // old_testament or new_testament
@@ -28,11 +35,12 @@ public class Book
 	
 	public Book()
 	{
-		name 			= "";
-		typeTestament 	= "";
-		bookIndex 		= 0;
-		numberOfChapter = 0;
-		relativeDir 	= "";
+		reachedEndOfFile 	= false;
+		name 				= "";
+		typeTestament 		= "";
+		bookIndex 			= 0;
+		numberOfChapter 	= 0;
+		relativeDir 		= "";
 	}
 	
 	public Book(String name) throws Exception
@@ -102,6 +110,8 @@ public class Book
 	
 	public void setBook(String name) throws Exception
 	{
+		reachedEndOfFile = false;
+		
 		int firstDashCharacterIndex = name.indexOf('_');
 		if (firstDashCharacterIndex != -1)
 		{
@@ -133,6 +143,7 @@ public class Book
 		if(chapter <= 0 || chapter > numberOfChapter)
 			return null;
 		
+		reachedEndOfFile = false;
 		Vector verses = new Vector();
 		
 		String relativeDir = "books/" + AppSettings.getInstance().appLanguage + "/" + AppSettings.getInstance().selectedTestament + "/" + String.valueOf(this.bookIndex) + "_" + name;
@@ -140,14 +151,22 @@ public class Book
 		String absolutePath = AppSettings.APP_DATA_ON_SD_CARD + fullPath;
 		
 		FileConnection fConnection = (FileConnection) Connector.open(absolutePath);
-		DataInputStream iStream = fConnection.openDataInputStream();
-		
+		InputStream iStream = fConnection.openInputStream();
 		// reading
 		{
 			// just for debug
-			verses.addElement("(1) Verses 1.");
-			verses.addElement("(2) Verses 2.");
-			verses.addElement("(3) Verses 3.");
+//			verses.addElement("(1) Verses 1.");
+//			verses.addElement("(2) Verses 2.");
+//			verses.addElement("(3) Verses 3.");
+			
+			while (true)
+			{
+				String verse = readLine(iStream);
+				verses.addElement(verse);
+				
+				if (reachedEndOfFile)
+					break;
+			}
 		}
 		
 		iStream.close();
@@ -158,5 +177,28 @@ public class Book
 	// ===================================================
 	// private methods
 	
-	
+	private String readLine(InputStream in) throws IOException
+	{
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		
+		while (true)
+		{
+			int b = in.read();
+			
+			if (b < 0)
+			{
+				reachedEndOfFile = true;
+				break;
+			}
+			
+			if (b == 0x0A)
+			{
+				break; // '\n' character
+			}
+			
+			buffer.write(b);
+		}
+		
+		return new String(buffer.toByteArray(), "UTF-8");
+	}
 };

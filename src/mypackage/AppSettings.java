@@ -29,6 +29,8 @@ public class AppSettings
 	public static final String APP_LANGUAGE_ENGLISH 		= "English";
 	public static final String APP_LANGUAGE_VIETNAMESE 		= "Vietnamese";
 	
+	public static final String END_OF_FILE					= "__EOF__";
+	
 	// ============================================================
 	// setting attributes
 	
