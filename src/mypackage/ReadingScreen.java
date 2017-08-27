@@ -13,6 +13,7 @@ import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
@@ -119,7 +120,7 @@ public class ReadingScreen extends MainScreen {
 
 			}
 			
-			return false;
+			return true;
 		}
 		
 		return false;
@@ -150,17 +151,19 @@ public class ReadingScreen extends MainScreen {
 		
 		// =========================================================================================
 		// middle
-		mid = new VerticalFieldManager();
+		mid = new VerticalFieldManager(VERTICAL_SCROLL);
 		
 		int chapter = Integer.valueOf(AppSettings.getInstance().selectedChapter).intValue();
 		Vector content = this.selectedBook.readChapter(chapter);
+		
 		for (int i = 0; i < content.size(); i++)
 		{
 			HorizontalFieldManager hor = new HorizontalFieldManager();
 			VerticalFieldManager ver = new VerticalFieldManager();
 			
-			LabelField verse = new LabelField("", LabelField.VFULL);
-			verse.setText(content.elementAt(i));
+			TextField verse = new TextField(TextField.FOCUSABLE | TextField.READONLY);
+			verse.setText((String) content.elementAt(i));
+			verse.setEditable(false);
 			
 			hor.add(verse);
 			ver.add(hor);
@@ -192,8 +195,9 @@ public class ReadingScreen extends MainScreen {
 				HorizontalFieldManager hor = new HorizontalFieldManager();
 				VerticalFieldManager ver = new VerticalFieldManager();
 				
-				LabelField verse = new LabelField("", LabelField.VFULL);
-				verse.setText(content.elementAt(i));
+				TextField verse = new TextField(TextField.FOCUSABLE | TextField.READONLY);
+				verse.setText((String) content.elementAt(i));
+				verse.setEditable(false);
 				
 				hor.add(verse);
 				ver.add(hor);
@@ -225,8 +229,9 @@ public class ReadingScreen extends MainScreen {
 				HorizontalFieldManager hor = new HorizontalFieldManager();
 				VerticalFieldManager ver = new VerticalFieldManager();
 				
-				LabelField verse = new LabelField("", LabelField.VFULL);
-				verse.setText(content.elementAt(i));
+				TextField verse = new TextField(TextField.FOCUSABLE | TextField.READONLY);
+				verse.setText((String) content.elementAt(i));
+				verse.setEditable(false);
 				
 				hor.add(verse);
 				ver.add(hor);

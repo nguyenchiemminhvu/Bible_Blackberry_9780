@@ -134,23 +134,11 @@ public class TestamentSelectionScreen extends MainScreen {
 	
 	private void initUITest() {
 		
-		this.addTrackwheelListener(new TrackwheelListener() {
-			
-			public boolean trackwheelUnclick(int status, int time) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			public boolean trackwheelRoll(int amount, int status, int time) {
-				// TODO Auto-generated method stub
-				//test.setText("" + amount + "  " + status + "  " + time);
-				return false;
-			}
-			
-			public boolean trackwheelClick(int status, int time) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
+		for (int i = 0; i < 100; i++)
+		{
+			LabelField label = new LabelField(String.valueOf(i + 1));
+			this.add(label);
+		}
+		
 	}
 }
