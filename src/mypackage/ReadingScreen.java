@@ -7,6 +7,9 @@ import net.rim.device.api.crypto.Key;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EventInjector.KeyCodeEvent;
 import net.rim.device.api.system.KeyListener;
+import net.rim.device.api.ui.Font;
+import net.rim.device.api.ui.FontFamily;
+import net.rim.device.api.ui.FontManager;
 import net.rim.device.api.ui.Keypad;
 import net.rim.device.api.ui.Trackball;
 import net.rim.device.api.ui.component.BitmapField;
@@ -48,6 +51,7 @@ public class ReadingScreen extends MainScreen {
 					try {
 						readNextChapter();
 					} catch (IOException e) {
+					} catch (ClassNotFoundException e) {
 					}
 					
 					break;
@@ -57,6 +61,7 @@ public class ReadingScreen extends MainScreen {
 					try {
 						readPrevChapter();
 					} catch (IOException e) {
+					} catch (ClassNotFoundException e) {
 					}
 					
 					break;
@@ -105,6 +110,8 @@ public class ReadingScreen extends MainScreen {
 				
 			} catch (IOException e) {
 
+			} catch (ClassNotFoundException e) {
+
 			}
 			
 			return true;
@@ -118,6 +125,8 @@ public class ReadingScreen extends MainScreen {
 				
 			} catch (IOException e) {
 
+			} catch (ClassNotFoundException e) {
+
 			}
 			
 			return true;
@@ -129,7 +138,7 @@ public class ReadingScreen extends MainScreen {
 	// ==========================================================================
 	// private methods
 	
-	private void initUI() throws IOException
+	private void initUI() throws IOException, ClassNotFoundException
 	{
 		// =========================================================================================
 		// top bar title
@@ -165,6 +174,18 @@ public class ReadingScreen extends MainScreen {
 			verse.setText((String) content.elementAt(i));
 			verse.setEditable(false);
 			
+			FontFamily fFamily = FontFamily.forName("Times New Roman");
+			if (!isTopicSentence((String) content.elementAt(i)))
+			{
+				Font font = fFamily.getFont(Font.BOLD, 35);
+				verse.setFont(font);
+			}
+			else
+			{
+				Font font = fFamily.getFont(Font.PLAIN, 30);
+				verse.setFont(font);
+			}
+			
 			hor.add(verse);
 			ver.add(hor);
 			
@@ -179,7 +200,7 @@ public class ReadingScreen extends MainScreen {
 		this.add(mid);
 	}
 	
-	private void readNextChapter() throws IOException
+	private void readNextChapter() throws IOException, ClassNotFoundException
 	{
 		horizontalNavigation = 0;
 		
@@ -199,6 +220,18 @@ public class ReadingScreen extends MainScreen {
 				verse.setText((String) content.elementAt(i));
 				verse.setEditable(false);
 				
+				FontFamily fFamily = FontFamily.forName("Times New Roman");
+				if (!isTopicSentence((String) content.elementAt(i)))
+				{
+					Font font = fFamily.getFont(Font.BOLD, 35);
+					verse.setFont(font);
+				}
+				else
+				{
+					Font font = fFamily.getFont(Font.PLAIN, 30);
+					verse.setFont(font);
+				}
+				
 				hor.add(verse);
 				ver.add(hor);
 				
@@ -213,7 +246,7 @@ public class ReadingScreen extends MainScreen {
 		}
 	}
 	
-	private void readPrevChapter() throws IOException
+	private void readPrevChapter() throws IOException, ClassNotFoundException
 	{
 		horizontalNavigation = 0;
 		
@@ -233,6 +266,18 @@ public class ReadingScreen extends MainScreen {
 				verse.setText((String) content.elementAt(i));
 				verse.setEditable(false);
 				
+				FontFamily fFamily = FontFamily.forName("Times New Roman");
+				if (!isTopicSentence((String) content.elementAt(i)))
+				{
+					Font font = fFamily.getFont(Font.BOLD, 35);
+					verse.setFont(font);
+				}
+				else
+				{
+					Font font = fFamily.getFont(Font.PLAIN, 30);
+					verse.setFont(font);
+				}
+				
 				hor.add(verse);
 				ver.add(hor);
 				
@@ -245,5 +290,16 @@ public class ReadingScreen extends MainScreen {
 			else
 				topTitle.setText(this.selectedBook.getName() + " - " + AppSettings.getInstance().selectedChapter);
 		}
+	}
+	
+	private boolean isTopicSentence(String s)
+	{
+		if (s.length() == 0)
+			return false;
+		
+		if (Character.isDigit(s.charAt(0)))
+			return true;
+		
+		return false;
 	}
 }

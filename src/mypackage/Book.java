@@ -199,6 +199,9 @@ public class Book
 			buffer.write(b);
 		}
 		
-		return new String(buffer.toByteArray());
+		if (buffer.size() == 0)
+			return new String(" ");
+		
+		return new String(buffer.toByteArray(), "UTF-8");
 	}
 };
